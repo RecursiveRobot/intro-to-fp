@@ -1,0 +1,752 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>A (Gentle) Introduction to FP</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/night.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-markdown>
+				<script type="text/template">
+					### A (Gentle) Introduction to Functional Programming
+					
+					#### Attie Naude
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					#### Who has done FP before?
+
+					<img class="fragment" height="300" src="images/excel.png" />
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					#### Who has coded in an FP Language before?
+
+					<img class="fragment" height="300" src="images/js.png" />
+				</script>
+			</section>
+			<section name="what">
+				<section data-markdown>
+					<script type="text/template">
+						## What?
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## What is Functional Programming?
+
+						- Paradigm of Programming
+						- Emphasis on Function
+						- Strong Mathematical Influence
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Paradigm of Programming
+
+						- Models Behaviour
+						- Abstracts over Complexity
+						- **Generalised**
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Emphasis on Functions
+						
+						<ul>
+							<li>Functions in FP == Objects in OO</li>
+							<li>Functions have extra features
+								<ul>
+									<li>Composability</li>
+									<li>Higher-Order Functions</li>
+								</ul>
+							</li>
+							<li>Program is one function</li>
+						</ul>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### What is a function?
+
+						From [mathisfun.com](http://www.mathsisfun.com/sets/function.html):
+
+						> A function is a special relationship between values:
+
+						> Each of its input values gives back exactly one output value.
+
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Function
+						
+						<img src="images/function-sets.gif" height="300" alt="Function" />
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Not a Function
+
+						<img src="images/relation-not-function.gif" height="300" alt="Not A Function" />
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Vertical Line Test
+
+						<img src="images/vertical-line-test.gif" height="300" alt="Vertical Line Test" />
+
+						<small>[Source](http://www.mathsisfun.com/sets/function.html)</small>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Strong Mathematical Influence
+
+						- Equality instead of assignment
+						<pre><code class="hljs" data-trim contenteditable data-noescape>
+f(x) = x + 2
+a = b + c
+						</code></pre>
+						- Composition
+						- Calculus
+						- Category theory
+					</script>
+				</section>
+			</section>
+			<section name="why">
+				<section data-markdown>
+					<script type="text/template">
+						## Why?
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Why Functional Programming?
+						
+						<ul>
+							<li class="fragment">Simple</li>
+							<li class="fragment">Testable</li>
+							<li class="fragment">Scalable</li>
+							<li class="fragment">Reusable</li>
+							<li class="fragment">Optimizable</li>
+						</ul>
+						
+						Note:
+						- Simple : Declarative style is simpler to write and easier to reason about.
+						- Testable : No reliance on external state means no mocking and stubbing.  Simply pass in all required parameters and check output.
+						- Scalable : Since each function executes in isolation and has no side-effects, they are inherently parallelizable.
+						- Reusable : Functions become building blocks of bigger functions.
+						- Optimizable : Results of pure functions can be cached. Pure functions are referentially transparent, can be replaced with their result by compiler.  No temporal coupling means functions can be evaluated lazily.
+					</script>
+				</section>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## How?
+					
+					Note:
+					-  Firstly, you'll need a programming language that treats functions as first-class citizens
+				</script>
+			</section>
+
+			<section>
+				<section data-markdown>
+					<script type="text/template">
+						### 1. First-Class Functions
+						
+						* Can be stored in variables
+						* Can be passed in as parameters to other functions
+						* Can be returned as the result of a function call
+					</script>
+				</section>
+
+				<section>
+					<h3>Function stored in Variable</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+	var double = function(x) {
+	  x * 2;
+	};
+	
+	double(5);
+	// 10
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Function as Parameter</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+	function apply(func, value) {
+	  return func(value);
+	};
+	
+	var double = x => x * 2;
+	
+	apply(double, 5);
+	// 10
+					</code></pre>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Function as Result
+						<pre><code class="hljs" data-trim contenteditable>
+var getDoubleFunction = function() {
+	return x => x * 2;
+};
+
+var double = getDoubleFunction();
+
+double(5);
+// 10
+					</code></pre>
+
+					Note:
+					- The second essential building block of FP is pure functions
+				</script>
+			</section>
+		</section>
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					### 2. Pure Functions
+					
+					- No dependency on external state
+					- No side-effects
+					- Given the same input, always produces the same output
+						- f(x) === f(x)
+					- No temporal coupling
+					
+					Note:
+					- This is exactly what we discussed early during definition of a function
+					- Pure function = mathematical concept of function
+					- This is very important, since this means we can apply mathematical rules to them
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Let's look at some examples
+				</script>
+			</section>
+
+			<section>
+				<h2>Pure or Impure?</h2>
+				<pre><code class="hljs" data-trim contenteditable>
+var rollD20 = function() {
+  return Math.round(Math.random() * 20);
+};
+                    </code></pre>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Impure!
+					<pre><code class="hljs" data-trim contenteditable>
+var rollD20 = function() {
+  return Math.ceil(Math.random() * 20);
+};
+
+var firstRoll = rollD20();
+// 11
+
+var secondRoll = rollD20();
+// 3
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Pure or Impure?
+
+					<pre><code class="hljs" data-trim contenteditable>
+var Greeter = (function () {
+	function Greeter(message) {
+		this.greeting = message;
+	}
+	Greeter.prototype.greet = function () {
+		return "Hello, " + this.greeting;
+	};
+	return Greeter;
+}());
+
+var greeter = new Greeter("world");
+greeter.greet();
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Impure!
+					<pre><code class="hljs" data-trim contenteditable>
+var Greeter = (function () {
+	function Greeter(message) {
+		this.greeting = message;
+	}
+	Greeter.prototype.greet = function () {
+		return "Hello, " + this.greeting;
+	};
+	return Greeter;
+}());
+
+var greeter = new Greeter("world");
+greeter.greet();  
+// "Hello, world"
+
+greeter.greeting = "darkness, my old friend...";
+greeter.greet();  
+// "Hello, darkness, my old friend..."
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Pure or Impure?
+
+					<pre><code class="hljs" data-trim contenteditable>
+public IEnumerable&lt;Person&gt; GetOldPeople(IEnumerable&lt;Person&gt; people)
+{
+	return people.Where(p => p.Age >= 30);
+}
+					</code></pre>
+					</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Pure!
+					<pre><code class="hljs" data-trim contenteditable>
+public IEnumerable&lt;Person&gt; GetOldPeople(IEnumerable&lt;Person&gt; people)
+{
+	// Original "people" list not modified by Where function...
+	return people.Where(p => p.Age >= 30);
+}
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Pure or Impure?
+					<pre><code class="hljs" data-trim contenteditable>
+let FizzBuzz input =
+	match input with
+	| i when i % 3 = 0 && i % 5 = 0 -> printfn "%s" "FizzBuzz"
+	| i when i % 3 = 0 -> printfn "%s" "Fizz"
+	| i when i % 5 = 0 -> printfn "%s" "Buzz"
+	| i -> printfn "%i" i
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Impure!
+					<pre><code class="hljs" data-trim contenteditable>
+let FizzBuzz input =
+	match input with
+	| i when i % 3 = 0 && i % 5 = 0 -> printfn "%s" "FizzBuzz"
+	| i when i % 3 = 0 -> printfn "%s" "Fizz"
+	| i when i % 5 = 0 -> printfn "%s" "Buzz"
+	| i -> printfn "%i" i
+	
+FizzBuzz 23
+// Prints "23" to console...
+					</code></pre>
+				</script>
+			</section>
+		</section>
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					### 3. Immutable Data Structures
+					
+					- Cannot be modified
+					- New instance has to be created with updated value
+					- Eliminates temporal coupling within function scope
+					- Facilitates safe multi-threading
+					- Recursion over iteration
+					
+					Note:
+					- Traditional OO languages pass objects by ref - temporal coupling still exists within function scope
+					- FP languages have immutable DS as default
+					- Provides first-class support
+					- Other languages provide libraries to help, but discipline still required
+				</script>
+			</section>
+
+			<section>
+				### Imperative C#
+				<pre><code class="hljs" data-trim contenteditable>
+var total = 0;
+foreach (int i in items)
+{
+	total += i;
+}
+return total;
+				</code></pre>
+			</section>
+
+			<section>
+				### Functional F#
+				<pre><code class="hljs" data-trim contenteditable>
+// sumList :: [int] -> int
+let rec sumList items =
+	match items with
+	| []    -> 0
+	| x::xs -> x + sumList xs
+				</code></pre>
+			</section>
+		</section>
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					### 4. Currying (Partial Application)
+					
+					- Call function with a subset of parameters
+					- Receive new function expecting the rest of the parameters
+						- Provided parameters captured in closure
+				</script>
+			</section>
+
+			<section>
+				### Uncurried
+				<pre><code class="hljs" data-trim contenteditable>
+// Uncurried..
+function add(a, b) {
+	return a + b;
+}
+
+var c = add(1, 2);
+// 3
+				</code></pre>
+			</section>
+
+			<section>
+				### Curried
+				<pre><code class="hljs" data-trim contenteditable>
+// Curried...
+function addCurried(a) {
+	return function(b) {
+		return a + b;
+	}
+}
+
+var c = addCurried(1)(2);
+// 3
+
+var add5 = addCurried(5);
+// add5 :: int -> int
+var d = add5(2);
+// 7
+				</code></pre>
+			</section>
+
+			<section>
+				### Same code in a Functional Language #### F#
+				<pre><code class="hljs" data-trim contenteditable>
+// add :: int -> int -> int
+let add a b =
+    a + b
+	
+let add5 = add 5
+
+let answer = add5 2
+				</code></pre>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Why Curry?
+					
+					- Allows us to construct functions with 1 input parameter
+					- Roughly equivalent to dependency injection in OO
+					- Removes reliance on external state
+					- Pre-populate shared values
+				</script>
+			</section>
+		</section>
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					### 5. Composition
+
+					- Combine 2 existing functions into a new function
+					- Evalutated right-to-left
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Implementation in JS
+
+<pre><code class="hljs" data-trim contenteditable>
+var compose = function(f,g) {
+	return function(x) {
+		return f(g(x));
+	};
+};
+</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Composition
+
+					![Without Composition](images/cat_comp1.png "Without Composition")
+					![With Composition](images/cat_comp2.png "With Composition")
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Composition in JS
+
+					<pre><code class="hljs" data-trim contenteditable>
+var compose = function(f,g) {
+	return function(x) {
+		return f(g(x));
+	};
+};
+
+var openingSpan = function(input) {
+	return "<span>" + input;
+};
+
+var closingSpan = function(input) {
+	return input + "</span>";
+};
+
+var encloseInSpan = compose(closingSpan, openingSpan);
+
+var result = encloseInSpan("Hello World!");
+// <span>Hello World!</span>
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Composition in F&#35;
+
+					<pre><code class="hljs" data-trim contenteditable>
+let openingSpan input =
+	"<span>" + input
+
+let closingSpan input =
+	input + "</span>"
+
+let encloseInSpan = openingSpan >> closingSpan
+
+let result = encloseInSpan "Hello World!"
+// <span>Hello World!</span>
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Composition is Associative
+
+					<pre><code class="hljs" data-trim contenteditable>
+compose(f, compose(g, h)) == compose(compose(f, g), h)
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Associativity Example
+
+					<pre><code class="hljs" data-trim contenteditable>
+var openingSpan = function(input) {
+	return "&lt;span&gt;" + input;
+};
+
+var closingSpan = function(input) {
+	return input + "&lt;/span&gt;";
+};
+
+var openingBody = function(input) {
+	return "&lt;body&gt;" + input;
+};
+
+var closingBody = function(input) {
+	return input + "&lt;/body&gt;";
+};
+
+var htmlEscaper1 = compose(closingBody, closingSpan, openingSpan, openingBody);
+var htmlEscaper2 = compose(compose(closingBody, closingSpan), openingSpan, openingBody);
+var htmlEscaper3 = compose(closingBody, compose(closingSpan, openingSpan), openingBody);
+var htmlEscaper4 = compose(compose(closingBody, closingSpan), compose(openingSpan, openingBody));
+					</code></pre>
+				</script>
+			</section>
+		</section>
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					### 6. Point-free style
+
+					* Don't specify the data upon which a function operates
+					* Data is passed in as final parameter to composed function
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Example 1
+						
+					<pre><code class="hljs" data-trim contenteditable>
+// Not pointfree because we mention the data: word
+var snakeCase = function(word) {
+	return word.toLowerCase().replace(/\s+/ig, '_');
+};
+
+// Pointfree
+var snakeCase = compose(replace(/\s+/ig, '_'), toLowerCase);
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Example 2
+
+					<pre><code class="hljs" data-trim contenteditable>
+// Not pointfree because we mention the data: name
+var initials = function(name) {
+	return name.split(' ').map(compose(toUpperCase, head)).join('. ');
+};
+
+// Pointfree
+var initials = compose(join('. '), map(compose(toUpperCase, head)), split(' '));
+
+initials("hunter stockton thompson");
+// 'H. S. T'
+					</code></pre>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Pro's and Con's
+
+					* No need to name input paramaters
+					* Less readable in some instances
+					* Natural form if composing functions
+				</script>
+			</section>
+		</section>
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					### 7. Hindley-Milner Type System
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Hindley-Milner Type System
+
+					* Used in statically typed languages
+					* Algebraic type system
+					* Includes algorithm for determining most general type satisfying function constraints
+					* Specification for Type Signatures
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Type Constraints
+
+					* Additional constraints imposed on types
+					* Included in type signatures
+					* Inferred and imposed in FP languages
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Examples
+
+					<pre><code class="hljs" data-trim contenteditable>
+// sort :: Ord a => [a] -> [a]
+
+// assertEqual :: (Eq a, Show a) => a -> a -> Assertion
+
+// Etc...
+					</code></pre>
+				</script>
+			</section>
+		</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Credits:
+					* [Professor Frisby's Mostly Adequate Guide to Functional Programming](https://github.com/MostlyAdequate/mostly-adequate-guide)
+					
+					<img height="280px" src="https://raw.githubusercontent.com/MostlyAdequate/mostly-adequate-guide/master/images/cover.png" />
+				</script>
+			</section>
+
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js' },
+				{ src: 'plugin/markdown/markdown.js' },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } }
+			]
+		});
+	</script>
+</body>
+
+</html>
