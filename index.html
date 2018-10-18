@@ -38,7 +38,7 @@
 				<script type="text/template">
 					#### Who has done FP before?
 
-					<img class="fragment" height="300" src="images/excel.png" />
+					<img class="fragment" height="300" src="assets/excel.png" />
 				</script>
 			</section>
 
@@ -46,18 +46,18 @@
 				<script type="text/template">
 					#### Who has coded in an FP Language before?
 
-					<img class="fragment" height="300" src="images/js.png" />
+					<img class="fragment" height="300" src="assets/js.png" />
 				</script>
 			</section>
 			<section name="what">
-				<section data-markdown>
+				<section data-markdown data-background-video="assets/what.mp4" data-background-video-loop="loop">
 					<script type="text/template">
 						## What?
 					</script>
 				</section>
 				<section data-markdown>
 					<script type="text/template">
-						## What is Functional Programming?
+						### What is Functional Programming?
 
 						- Paradigm of Programming
 						- Emphasis on Function
@@ -72,6 +72,9 @@
 						- Models Behaviour
 						- Abstracts over Complexity
 						- **Generalised**
+
+						Note:
+							-  Functions are polymorphic by default in most FP languages
 					</script>
 				</section>
 
@@ -109,7 +112,7 @@
 					<script type="text/template">
 						### Function
 						
-						<img src="images/function-sets.gif" height="300" alt="Function" />
+						<img src="assets/function-sets.gif" height="300" alt="Function" />
 					</script>
 				</section>
 
@@ -117,7 +120,7 @@
 					<script type="text/template">
 						### Not a Function
 
-						<img src="images/relation-not-function.gif" height="300" alt="Not A Function" />
+						<img src="assets/relation-not-function.gif" height="300" alt="Not A Function" />
 					</script>
 				</section>
 
@@ -125,7 +128,7 @@
 					<script type="text/template">
 						### Vertical Line Test
 
-						<img src="images/vertical-line-test.gif" height="300" alt="Vertical Line Test" />
+						<img src="assets/vertical-line-test.gif" height="300" alt="Vertical Line Test" />
 
 						<small>[Source](http://www.mathsisfun.com/sets/function.html)</small>
 					</script>
@@ -143,14 +146,19 @@ a = b + c
 						- Composition
 						- Calculus
 						- Category theory
+
+						Note:
+							- Equality implies that LHS can be substituted with RHS
+							- Lambda calculus invented by Alonzo Church in the 1930's
+							- Curry-Howard Isomorphism allows for application of mathematical rules in computation
 					</script>
 				</section>
 			</section>
 			<section name="why">
-				<section data-markdown>
-					<script type="text/template">
+				<section data-markdown data-background-video="assets/why.mp4" data-background-video-loop="loop">
+					<!-- <script type="text/template">
 						## Why?
-					</script>
+					</script> -->
 				</section>
 
 				<section data-markdown>
@@ -175,12 +183,13 @@ a = b + c
 				</section>
 			</section>
 
-			<section data-markdown>
+			<section data-markdown  data-background-video="assets/how.mp4" data-background-video-loop="loop">
 				<script type="text/template">
 					## How?
 					
 					Note:
-					-  Firstly, you'll need a programming language that treats functions as first-class citizens
+					- Now that we know what it is and why we'd want to use it, let's talk about the fundamental techniques used in FP
+					- By no means is this an exhaustive list, just a few of the most useful techniques that can be applied in most languages
 				</script>
 			</section>
 
@@ -234,9 +243,6 @@ var double = getDoubleFunction();
 double(5);
 // 10
 					</code></pre>
-
-					Note:
-					- The second essential building block of FP is pure functions
 				</script>
 			</section>
 		</section>
@@ -250,12 +256,17 @@ double(5);
 					- Given the same input, always produces the same output
 						- f(x) === f(x)
 					- No temporal coupling
+					- Referentially transparent
 					
 					Note:
-					- This is exactly what we discussed early during definition of a function
+					- This is exactly what we discussed earlier during definition of a function
 					- Pure function = mathematical concept of function
 					- This is very important, since this means we can apply mathematical rules to them
 				</script>
+			</section>
+
+			<section>
+				<img height="100%" src="assets/no-side-effects.png" />
 			</section>
 
 			<section data-markdown>
@@ -406,6 +417,7 @@ FizzBuzz 23
 					
 					Note:
 					- Traditional OO languages pass objects by ref - temporal coupling still exists within function scope
+						- Value might change between usages
 					- FP languages have immutable DS as default
 					- Provides first-class support
 					- Other languages provide libraries to help, but discipline still required
@@ -413,22 +425,42 @@ FizzBuzz 23
 			</section>
 
 			<section>
-				<h3>Imperative C#</h3>
+				<h3>Example in C#</h3>
 				<pre><code class="hljs" data-trim contenteditable>
-var total = 0;
-foreach (int i in items)
+// Mutating...
+public static getTotal(IEnumerable&lt;int&gt; items)
 {
-	total += i;
+	var total = 0;
+	foreach (int i in items)
+	{
+		total += i;
+	}
+	return total;
 }
-return total;
+
+// Non-mutating...
+public static getTotal(IEnumerable&lt;int&gt; items)
+{
+	if (!items.Any())
+		return 0;
+
+	return items.First() + getTotal(items.Skip(1));
+}
 				</code></pre>
 			</section>
 
 			<section>
-				<h3>Functional F#</h3>
+				<h3>Example in F#</h3>
 				<pre><code class="hljs" data-trim contenteditable>
-// sumList :: [int] -> int
-let rec sumList items =
+// Mutating...
+let getTotal items =
+    let mutable total = 0
+    for item in items do
+        total <- total + item
+    total  
+
+// Non-mutating...
+let rec getTotal items =
 	match items with
 	| []    -> 0
 	| x::xs -> x + sumList xs
@@ -532,8 +564,8 @@ var compose = function(f,g) {
 				<script type="text/template">
 					### Composition
 
-					![Without Composition](images/cat_comp1.png "Without Composition")
-					![With Composition](images/cat_comp2.png "With Composition")
+					![Without Composition](assets/cat_comp1.png "Without Composition")
+					![With Composition](assets/cat_comp2.png "With Composition")
 				</script>
 			</section>
 
@@ -597,7 +629,7 @@ compose(f, compose(g, h)) == compose(compose(f, g), h)
 				<script type="text/template">
 					### Associativity Example
 
-					<pre><code class="hljs" data-trim contenteditable>
+					<pre><code class="hljs" data-trim contenteditable style="font-size: 12px; line-height: 16px;">
 var openingSpan = function(input) {
 	return "&lt;span&gt;" + input;
 };
@@ -697,28 +729,18 @@ initials("hunter stockton thompson");
 
 			<section data-markdown>
 				<script type="text/template">
-					### Type Constraints
+					### Let's see some code
 
-					* Additional constraints imposed on types
-					* Included in type signatures
-					* Inferred and imposed in FP languages
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					### Examples
-
-					<pre><code class="hljs" data-trim contenteditable>
-// sort :: Ord a => [a] -> [a]
-
-// assertEqual :: (Eq a, Show a) => a -> a -> Assertion
-
-// Etc...
-					</code></pre>
+					<a href="code/hindley-milner.fsx" download>Hindley-Milner.fsx</a>
 				</script>
 			</section>
 		</section>
+
+			<section data-markdown data-background-video="assets/questions.mp4" data-background-video-loop="loop">
+				<script type="text/template">
+					### Questions?
+				</script>
+			</section>
 
 			<section data-markdown>
 				<script type="text/template">
@@ -740,6 +762,127 @@ initials("hunter stockton thompson");
 		// - https://github.com/hakimel/reveal.js#configuration
 		// - https://github.com/hakimel/reveal.js#dependencies
 		Reveal.initialize({
+			// Display presentation control arrows
+			controls: true,
+
+			// Help the user learn the controls by providing hints, for example by
+			// bouncing the down arrow when they first encounter a vertical slide
+			controlsTutorial: true,
+
+			// Determines where controls appear, "edges" or "bottom-right"
+			controlsLayout: 'bottom-right',
+
+			// Visibility rule for backwards navigation arrows; "faded", "hidden"
+			// or "visible"
+			controlsBackArrows: 'faded',
+
+			// Display a presentation progress bar
+			progress: true,
+
+			// Display the page number of the current slide
+			slideNumber: true,
+
+			// Push each slide change to the browser history
+			history: false,
+
+			// Enable keyboard shortcuts for navigation
+			keyboard: true,
+
+			// Enable the slide overview mode
+			overview: true,
+
+			// Vertical centering of slides
+			center: true,
+
+			// Enables touch navigation on devices with touch input
+			touch: true,
+
+			// Loop the presentation
+			loop: false,
+
+			// Change the presentation direction to be RTL
+			rtl: false,
+
+			// Randomizes the order of slides each time the presentation loads
+			shuffle: false,
+
+			// Turns fragments on and off globally
+			fragments: true,
+
+			// Flags whether to include the current fragment in the URL,
+			// so that reloading brings you to the same fragment position
+			fragmentInURL: true,
+
+			// Flags if the presentation is running in an embedded mode,
+			// i.e. contained within a limited portion of the screen
+			embedded: false,
+
+			// Flags if we should show a help overlay when the questionmark
+			// key is pressed
+			help: true,
+
+			// Flags if speaker notes should be visible to all viewers
+			showNotes: false,
+
+			// Global override for autoplaying embedded media (video/audio/iframe)
+			// - null: Media will only autoplay if data-autoplay is present
+			// - true: All media will autoplay, regardless of individual setting
+			// - false: No media will autoplay, regardless of individual setting
+			autoPlayMedia: null,
+
+			// Number of milliseconds between automatically proceeding to the
+			// next slide, disabled when set to 0, this value can be overwritten
+			// by using a data-autoslide attribute on your slides
+			autoSlide: 0,
+
+			// Stop auto-sliding after user input
+			autoSlideStoppable: true,
+
+			// Use this method for navigation when auto-sliding
+			autoSlideMethod: Reveal.navigateNext,
+
+			// Specify the average time in seconds that you think you will spend
+			// presenting each slide. This is used to show a pacing timer in the
+			// speaker view
+			defaultTiming: 120,
+
+			// Enable slide navigation via mouse wheel
+			mouseWheel: false,
+
+			// Hides the address bar on mobile devices
+			hideAddressBar: true,
+
+			// Opens links in an iframe preview overlay
+			// Add `data-preview-link` and `data-preview-link="false"` to customise each link
+			// individually
+			previewLinks: false,
+
+			// Transition style
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// Transition speed
+			transitionSpeed: 'default', // default/fast/slow
+
+			// Transition style for full page slide backgrounds
+			backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+
+			// Number of slides away from the current that are visible
+			viewDistance: 3,
+
+			// Parallax background image
+			parallaxBackgroundImage: '', // e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
+
+			// Parallax background size
+			parallaxBackgroundSize: '', // CSS syntax, e.g. "2100px 900px"
+
+			// Number of pixels to move the parallax background per slide
+			// - Calculated automatically unless specified
+			// - Set to 0 to disable movement along an axis
+			parallaxBackgroundHorizontal: null,
+			parallaxBackgroundVertical: null,
+
+			// The display mode that will be used to show slides
+			display: 'block',
 			dependencies: [
 				{ src: 'plugin/markdown/marked.js' },
 				{ src: 'plugin/markdown/markdown.js' },
