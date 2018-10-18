@@ -29,8 +29,9 @@
 			<section data-markdown>
 				<script type="text/template">
 					### A (Gentle) Introduction to Functional Programming
-					
-					#### Attie Naude
+					<br />
+					<br />
+					##### Attie Naude
 				</script>
 			</section>
 
@@ -53,6 +54,10 @@
 				<section data-markdown data-background-video="assets/what.mp4" data-background-video-loop="loop">
 					<script type="text/template">
 						## What?
+
+						Note:
+							- What is Functional Programming?
+							- How is it different from OO/Imperative Programming?
 					</script>
 				</section>
 				<section data-markdown>
@@ -81,7 +86,7 @@
 				<section data-markdown>
 					<script type="text/template">
 						### Emphasis on Functions
-						
+
 						<ul>
 							<li>Functions in FP == Objects in OO</li>
 							<li>Functions have extra features
@@ -92,6 +97,11 @@
 							</li>
 							<li>Program is one function</li>
 						</ul>
+
+						Note:
+							- Function = Fundamental building-block of FP
+							- We'll cover Composition and Higher-Order Functions later
+							- Single program function gets evaluated when application is launched/invoked
 					</script>
 				</section>
 
@@ -102,7 +112,6 @@
 						From [mathisfun.com](http://www.mathsisfun.com/sets/function.html):
 
 						> A function is a special relationship between values:
-
 						> Each of its input values gives back exactly one output value.
 
 					</script>
@@ -111,7 +120,7 @@
 				<section data-markdown>
 					<script type="text/template">
 						### Function
-						
+
 						<img src="assets/function-sets.gif" height="300" alt="Function" />
 					</script>
 				</section>
@@ -148,6 +157,7 @@ a = b + c
 						- Category theory
 
 						Note:
+							- Deals with equality rather than assignment
 							- Equality implies that LHS can be substituted with RHS
 							- Lambda calculus invented by Alonzo Church in the 1930's
 							- Curry-Howard Isomorphism allows for application of mathematical rules in computation
@@ -156,9 +166,12 @@ a = b + c
 			</section>
 			<section name="why">
 				<section data-markdown data-background-video="assets/why.mp4" data-background-video-loop="loop">
-					<!-- <script type="text/template">
+					<script type="text/template">
 						## Why?
-					</script> -->
+
+						Note:
+							- This all sounds great in theory, but what does it get us in practical terms?
+					</script>
 				</section>
 
 				<section data-markdown>
@@ -189,7 +202,7 @@ a = b + c
 					
 					Note:
 					- Now that we know what it is and why we'd want to use it, let's talk about the fundamental techniques used in FP
-					- By no means is this an exhaustive list, just a few of the most useful techniques that can be applied in most languages
+					- By no means is this an exhaustive list, just a few of the most useful topics that apply to most languages
 				</script>
 			</section>
 
@@ -197,7 +210,7 @@ a = b + c
 				<section data-markdown>
 					<script type="text/template">
 						### 1. First-Class Functions
-						
+
 						* Can be stored in variables
 						* Can be passed in as parameters to other functions
 						* Can be returned as the result of a function call
@@ -211,8 +224,7 @@ a = b + c
 	  x * 2;
 	};
 	
-	double(5);
-	// 10
+	double(5); // 10
 					</code></pre>
 				</section>
 
@@ -225,8 +237,7 @@ a = b + c
 	
 	var double = x => x * 2;
 	
-	apply(double, 5);
-	// 10
+	apply(double, 5); // 10
 					</code></pre>
 				</section>
 
@@ -240,8 +251,7 @@ var getDoubleFunction = function() {
 
 var double = getDoubleFunction();
 
-double(5);
-// 10
+double(5); // 10
 					</code></pre>
 				</script>
 			</section>
@@ -265,8 +275,12 @@ double(5);
 				</script>
 			</section>
 
-			<section>
-				<img height="100%" src="assets/no-side-effects.png" />
+			<section data-markdown>
+				<script type="text/template">
+					### Obligatory XKCD...
+					<br />
+					<img style="height: 400px" src="assets/no-side-effects.png" />
+				</script>
 			</section>
 
 			<section data-markdown>
@@ -279,7 +293,7 @@ double(5);
 				<h2>Pure or Impure?</h2>
 				<pre><code class="hljs" data-trim contenteditable>
 var rollD20 = function() {
-  return Math.round(Math.random() * 20);
+  return Math.ceil(Math.random() * 20);
 };
                     </code></pre>
 			</section>
@@ -292,11 +306,9 @@ var rollD20 = function() {
   return Math.ceil(Math.random() * 20);
 };
 
-var firstRoll = rollD20();
-// 11
+var firstRoll = rollD20(); // 11
 
-var secondRoll = rollD20();
-// 3
+var secondRoll = rollD20(); // 3
 					</code></pre>
 				</script>
 			</section>
@@ -304,7 +316,6 @@ var secondRoll = rollD20();
 			<section data-markdown>
 				<script type="text/template">
 					## Pure or Impure?
-
 					<pre><code class="hljs" data-trim contenteditable>
 var Greeter = (function () {
 	function Greeter(message) {
@@ -319,6 +330,10 @@ var Greeter = (function () {
 var greeter = new Greeter("world");
 greeter.greet();
 					</code></pre>
+
+					Note:
+					- Greeter "class" with constructor and greet "method"
+					- If you construct 2 Greeters with the same message, greet would return identical results from both
 				</script>
 			</section>
 
@@ -337,13 +352,14 @@ var Greeter = (function () {
 }());
 
 var greeter = new Greeter("world");
-greeter.greet();  
-// "Hello, world"
+greeter.greet(); // "Hello, world"
 
 greeter.greeting = "darkness, my old friend...";
-greeter.greet();  
-// "Hello, darkness, my old friend..."
+greeter.greet(); // "Hello, darkness, my old friend..."
 					</code></pre>
+
+					Note:
+					- However, greet relies on external state, so it's not pure
 				</script>
 			</section>
 
@@ -384,6 +400,8 @@ let FizzBuzz input =
 	| i when i % 5 = 0 -> printfn "%s" "Buzz"
 	| i -> printfn "%i" i
 					</code></pre>
+					Note:
+					- Here's some code in an FP language - surely this is pure?
 				</script>
 			</section>
 
@@ -398,9 +416,10 @@ let FizzBuzz input =
 	| i when i % 5 = 0 -> printfn "%s" "Buzz"
 	| i -> printfn "%i" i
 	
-FizzBuzz 23
-// Prints "23" to console...
+FizzBuzz 23 // Prints "23" to console...
 					</code></pre>
+					Note:
+					- Manipulates external state (side-effect), so not pure.
 				</script>
 			</section>
 		</section>
@@ -408,13 +427,13 @@ FizzBuzz 23
 			<section data-markdown>
 				<script type="text/template">
 					### 3. Immutable Data Structures
-					
+
 					- Cannot be modified
 					- New instance has to be created with updated value
 					- Eliminates temporal coupling within function scope
 					- Facilitates safe multi-threading
 					- Recursion over iteration
-					
+
 					Note:
 					- Traditional OO languages pass objects by ref - temporal coupling still exists within function scope
 						- Value might change between usages
@@ -466,6 +485,23 @@ let rec getTotal items =
 	| x::xs -> x + sumList xs
 				</code></pre>
 			</section>
+
+			<section>
+					<h3>Immutability by Default in F#</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+type Person =
+	{
+		Name : string
+		Surname : string
+	}
+
+let person1 = { Name = "John"; Surname = "Smith" }
+person1 = { Name = "Hammer"; Surname = "Smith" } // No error, but Equals sign checks for equality
+person1 <- { Name = "Hammer"; Surname = "Smith" } // error FS0027: This value is not mutable. Consider using the mutable keyword, e.g. 'let mutable person1 = expression'.
+
+let person2 = { person1 with Name = "Hammer" }
+					</code></pre>
+				</section>
 		</section>
 		<section>
 			<section data-markdown>
@@ -486,8 +522,7 @@ function add(a, b) {
 	return a + b;
 }
 
-var c = add(1, 2);
-// 3
+var c = add(1, 2); // 3
 				</code></pre>
 			</section>
 
@@ -501,13 +536,10 @@ function addCurried(a) {
 	}
 }
 
-var c = addCurried(1)(2);
-// 3
+var c = addCurried(1)(2); // 3
+var add5 = addCurried(5); // add5 :: int -> int
+var d = add5(2); // 7
 
-var add5 = addCurried(5);
-// add5 :: int -> int
-var d = add5(2);
-// 7
 				</code></pre>
 			</section>
 
@@ -515,13 +547,12 @@ var d = add5(2);
 				<h3>Same code in a Functional Language</h3>
 				<h4>F#</h4>
 				<pre><code class="hljs" data-trim contenteditable>
-// add :: int -> int -> int
 let add a b =
     a + b
-	
-let add5 = add 5
 
-let answer = add5 2
+let c = add a b // 3
+let add5 = add 5 // add5 :: int -> int
+let d = add5 2 // 7
 				</code></pre>
 			</section>
 
@@ -530,9 +561,13 @@ let answer = add5 2
 					### Why Curry?
 					
 					- Allows us to construct functions with 1 input parameter
+						- Important for composition
 					- Roughly equivalent to dependency injection in OO
-					- Removes reliance on external state
-					- Pre-populate shared values
+						- Removes reliance on external state
+						- Pre-populate shared values
+
+					Note:
+					- Functions accepting a single input parameter can be be composed with other functions that accept/return a parameter of the same type
 				</script>
 			</section>
 		</section>
@@ -557,6 +592,12 @@ var compose = function(f,g) {
 	};
 };
 </code></pre>
+					Note:
+						- Takes in 2 functions: f and g
+						- Returns a new function accepting the single input parameter for g
+						- When you call this new function, it:
+							- Invokes g with x
+							- Invokes f with result of g(x)
 				</script>
 			</section>
 
@@ -590,8 +631,7 @@ var closingSpan = function(input) {
 
 var encloseInSpan = compose(closingSpan, openingSpan);
 
-var result = encloseInSpan("Hello World!");
-// <span>Hello World!</span>
+var result = encloseInSpan("Hello World!"); // <span>Hello World!</span>
 					</code></pre>
 				</script>
 			</section>
@@ -609,8 +649,7 @@ let closingSpan input =
 
 let encloseInSpan = openingSpan >> closingSpan
 
-let result = encloseInSpan "Hello World!"
-// <span>Hello World!</span>
+let result = encloseInSpan "Hello World!" // <span>Hello World!</span>
 					</code></pre>
 				</script>
 			</section>
@@ -687,17 +726,29 @@ var snakeCase = compose(replace(/\s+/ig, '_'), toLowerCase);
 					<pre><code class="hljs" data-trim contenteditable>
 // Not pointfree because we mention the data: name
 var initials = function(name) {
-	return name.split(' ').map(compose(toUpperCase, head)).join('. ');
+	return name.split(' ').map(a => a.toUpperCase()[0]).join('. ');
 };
 
 // Pointfree
 var initials = compose(join('. '), map(compose(toUpperCase, head)), split(' '));
 
-initials("hunter stockton thompson");
-// 'H. S. T'
+initials("hunter stockton thompson"); // 'H. S. T'
 					</code></pre>
 				</script>
 			</section>
+
+			<section data-markdown>
+					<script type="text/template">
+						### Example 3
+	
+						<pre><code class="hljs" data-trim contenteditable>
+let openingSpan = sprintf "<span>%s"
+let closingSpan = sprintf "%s</span>"
+
+let encloseInSpan = openingSpan >> closingSpan
+						</code></pre>
+					</script>
+				</section>
 
 			<section data-markdown>
 				<script type="text/template">
@@ -713,14 +764,8 @@ initials("hunter stockton thompson");
 			<section data-markdown>
 				<script type="text/template">
 					### 7. Hindley-Milner Type System
-				</script>
-			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-					### Hindley-Milner Type System
-
-					* Used in statically typed languages
+					* Used in statically-typed languages
 					* Algebraic type system
 					* Includes algorithm for determining most general type satisfying function constraints
 					* Specification for Type Signatures
@@ -736,20 +781,20 @@ initials("hunter stockton thompson");
 			</section>
 		</section>
 
-			<section data-markdown data-background-video="assets/questions.mp4" data-background-video-loop="loop">
-				<script type="text/template">
-					### Questions?
-				</script>
-			</section>
+		<section data-markdown data-background-video="assets/questions.mp4" data-background-video-loop="loop">
+			<script type="text/template">
+				### Questions?
+			</script>
+		</section>
 
-			<section data-markdown>
-				<script type="text/template">
-					## Credits:
-					* [Professor Frisby's Mostly Adequate Guide to Functional Programming](https://github.com/MostlyAdequate/mostly-adequate-guide)
-					
-					<img height="280px" src="https://raw.githubusercontent.com/MostlyAdequate/mostly-adequate-guide/master/images/cover.png" />
-				</script>
-			</section>
+		<section data-markdown>
+			<script type="text/template">
+				## Resources:
+				* [Professor Frisby's Mostly Adequate Guide to Functional Programming](https://github.com/MostlyAdequate/mostly-adequate-guide)
+				
+				<img height="280px" src="https://raw.githubusercontent.com/MostlyAdequate/mostly-adequate-guide/master/images/cover.png" />
+			</script>
+		</section>
 
 		</div>
 	</div>
