@@ -482,7 +482,7 @@ let getTotal items =
 let rec getTotal items =
 	match items with
 	| []    -> 0
-	| x::xs -> x + sumList xs
+	| x::xs -> x + getTotal xs
 				</code></pre>
 			</section>
 
@@ -577,7 +577,7 @@ let d = add5 2 // 7
 					### 5. Composition
 
 					- Combine 2 existing functions into a new function
-					- Evalutated right-to-left
+					- Evaluated right-to-left
 				</script>
 			</section>
 
@@ -726,7 +726,7 @@ var snakeCase = compose(replace(/\s+/ig, '_'), toLowerCase);
 					<pre><code class="hljs" data-trim contenteditable>
 // Not pointfree because we mention the data: name
 var initials = function(name) {
-	return name.split(' ').map(a => a.toUpperCase()[0]).join('. ');
+	return name.split(' ').map(a => a[0].toUpperCase()).join('. ');
 };
 
 // Pointfree
@@ -754,7 +754,7 @@ let encloseInSpan = openingSpan >> closingSpan
 				<script type="text/template">
 					### Pro's and Con's
 
-					* No need to name input paramaters
+					* No need to name input parameters
 					* Less readable in some instances
 					* Natural form if composing functions
 				</script>
